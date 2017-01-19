@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "d3": "^4.4.1",
-    "jQuery": "^3.1.1"
+    "jQuery": "^3.1.1",
+    "lodash": "^4.17.4",
+    "bootstrap": "^3.3.7"
   }
 }
