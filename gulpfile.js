@@ -17,7 +17,7 @@ gulp.task('buildApp', function () {
     .pipe(bs.reload({stream: true}));
 });
 gulp.task('buildVendor', function () {
-  return gulp.src('bower_components/**/*.min.js')
+  return gulp.src(['bower_components/**/*.min.js', 'bower_components/bin-packing/js/packer.js'])
     .pipe(plumber())
     .pipe(concat('vendor.js'))
     .pipe(gulp.dest('docs'));
