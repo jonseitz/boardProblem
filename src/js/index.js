@@ -34,7 +34,7 @@ $(document).ready(function(){
     });
 
     console.log(cuts);
-    var packer = new Packer(width, height);
+    var packer = new Packer(source[0].w, source[0].h);
     cuts = _.orderBy(cuts, function(o){ return o.long * o.short }, ['desc'])
     _.each(cuts, function (e) {
       e.h = e.long;
