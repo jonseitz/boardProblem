@@ -6,3 +6,8 @@ body{
   fill:  none;
   stroke: black;
 }
+
+.cut{
+  fill: none;
+  stroke: red;
+}
