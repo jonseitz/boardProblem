@@ -11,3 +11,7 @@ body{
   fill: none;
   stroke: red;
 }
+
+.label{
+  font-size: 1em;
+}
