@@ -7,10 +7,12 @@ $(document).ready(function(){
     var lastrow = $(evt.target).prev();
     lastrow.clone().insertAfter(lastrow)
   };
+
   function calculate (evt){
     //initialize variables
     var source = [],
       cuts = [],
+      miss = [],
       test;
     // gather inputs 
     $('div.inputs div').each(function(i,e){
@@ -32,21 +34,19 @@ $(document).ready(function(){
         "label": cutWidth + 'x' + cutLength
       });
     });
-
-    console.log(cuts);
     var packer = new Packer(source[0].w, source[0].h);
     cuts = _.orderBy(cuts, function(o){ return o.long * o.short }, ['desc'])
     _.each(cuts, function (e) {
-      e.h = e.long;
-      e.w = e.short;
+      e.w = e.long;
+      e.h = e.short;
     });
-    test = packer.fit(cuts);
-
-    cuts = test    
-
-    console.log(cuts);
-    draw(source, cuts);
-    
+    cuts = packer.fit(cuts);
+    _.each(cuts, function(e,i,c) {
+      if (!e.fit) {
+        miss.push(cuts.splice(i,1)); 
+      }
+    });
+    draw(source, cuts, miss);
   };
 
   function draw(source, cuts) {
@@ -81,8 +81,52 @@ $(document).ready(function(){
       .append('rect')
       .attr('class', 'cut')
       .attr('x', function (d) { if (d.fit) { return margin/2 + (d.fit.x * scale)} })
-      .attr('y', function (d) { if (d.fit) {return margin/2 + (d.fit.y * scale)} })
+      .attr('y', function (d) { if (d.fit) {return margin/2 + (d.fit.y  * scale)} })
       .attr('width', function (d) { if (d.fit) {return d.w * scale}})
       .attr('height', function (d) { if (d.fit) {return d.h * scale}});
+
+    svg.selectAll('.label')
+      .data(cuts).enter()
+      .append('text')
+      .attr('class', 'label')
+      .attr('x', function (d) { if (d.fit) { return margin/2 + (d.fit.x * scale) + 5} })
+      .attr('y', function (d) { if (d.fit) {return margin/2 + (d.fit.y  * scale) + 15} })
+      .text(function(d) {return d.label});
   }
+
+  function swap (array, i, j) {
+    var result = array.slice();
+    result[i] = array[j];
+    result[j] = array[i];
+    return result;
+  }
+
+
+  function permute(source, array) {
+    var input = array.slice();
+    var result = [input];
+    var length = array.length;
+    var c = new Array(length);
+    _.fill(c, 0);
+    var i = 0;
+    while (i < length) {
+      if (c[i] < i) {
+        if (i % 2) {
+          input = swap(input, c[i], i);
+        }
+        else {
+          input = swap(input, 0, i);
+        }
+        result.push(input);
+        draw(source, input);
+        c[i] += 1;
+        i = 0;
+      }
+      else {
+        c[i] = 0;
+        i += 1;        
+      }
+    }
+    return result;
+  };
 })
