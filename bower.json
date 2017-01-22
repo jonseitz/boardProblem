@@ -19,6 +19,10 @@
     "d3": "^4.4.1",
     "jQuery": "^3.1.1",
     "lodash": "^4.17.4",
-    "bootstrap": "^3.3.7"
+    "bootstrap": "^3.3.7",
+    "mathjs": "^3.8.1"
+  },
+  "resolutions": {
+    "lodash": "4.3.0"
   }
 }
